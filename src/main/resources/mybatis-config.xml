@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <environments default="dev">
+        <!--dev环境配置-->
+        <environment id="dev">
+            <!--采用JDBC方式对数据库事务进行commit/rollback-->
+            <transactionManager type="JDBC" />
+            <!--采用连接池方式管理数据库连接-->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver" />
+                <!--
+                    useUnicode: 使用Unicode编码解决乱码的问题
+                    &amp; &符号直接用会报错转译一下
+                    characterEncoding: 字符集
+                -->
+                <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/babytun?useUnicode=true&amp;characterEncoding=UTF-8" />
+                <property name="username" value="root" />
+                <property name="password" value="11776174" />
+            </dataSource>
+        </environment>
+        <!--使用id来区分多个配置-->
+        <!--<environment id="prd">-->
+        <!--    <transactionManager type="JDBC" />-->
+        <!--    <dataSource type="POOLED">-->
+        <!--        -->
+        <!--    </dataSource>-->
+        <!--</environment>-->
+    </environments>
+    <mappers>
+        <mapper resource="org/mybatis/example/BlogMapper.xml" />
+    </mappers>
+</configuration>
