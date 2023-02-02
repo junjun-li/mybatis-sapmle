@@ -1,3 +1,6 @@
+package com.imooc.mybatis;
+
+import com.imooc.utils.MyBatisUtils;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
@@ -30,6 +33,19 @@ public class MyBatisTest {
                 // 如果type="UNPOOLED",代表直连,close则会调用Connection.close()方法关闭连接
                 sqlSession.close();
             }
+        }
+    }
+
+    public void testMyBatisUtils() throws Exception {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            Connection connection = sqlSession.getConnection();
+            System.out.println(connection);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
         }
     }
 }
