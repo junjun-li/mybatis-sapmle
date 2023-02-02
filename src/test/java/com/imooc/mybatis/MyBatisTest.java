@@ -1,5 +1,6 @@
 package com.imooc.mybatis;
 
+import com.imooc.entity.Goods;
 import com.imooc.utils.MyBatisUtils;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.Configuration;
@@ -10,6 +11,7 @@ import org.junit.Test;
 
 import java.io.Reader;
 import java.sql.Connection;
+import java.util.List;
 
 public class MyBatisTest {
     @Test
@@ -36,12 +38,29 @@ public class MyBatisTest {
         }
     }
 
+    @Test
     public void testMyBatisUtils() throws Exception {
         SqlSession sqlSession = null;
         try {
             sqlSession = MyBatisUtils.openSession();
             Connection connection = sqlSession.getConnection();
             System.out.println(connection);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
+        }
+    }
+
+    @Test
+    public void testSelectAll() throws Exception {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            List<Goods> list = sqlSession.selectList("goods.selectAll");
+            for (Goods g : list) {
+                System.out.println(g.getTitle());
+            }
         } catch (Exception e) {
             throw e;
         } finally {
