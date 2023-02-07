@@ -8,12 +8,14 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.Test;
+import sun.awt.image.ImageWatched;
 
 import java.io.Reader;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.*;
 
 public class MyBatisTest {
     @Test
@@ -96,6 +98,22 @@ public class MyBatisTest {
             List<Goods> list = sqlSession.selectList("goods.selectByPriceRange", params);
             for (Goods g : list) {
                 System.out.println("价格: " + g.getCurrentPrice() + " " + g.getTitle());
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
+        }
+    }
+
+    @Test
+    public void testSelectGoodsLinkedHashMap() {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            List<Map> list = sqlSession.selectList("goods.selectGoodsLinkedHashMap");
+            for (Map item : list) {
+                System.out.println(item);
             }
         } catch (Exception e) {
             throw e;
