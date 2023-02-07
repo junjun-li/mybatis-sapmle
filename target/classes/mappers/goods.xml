@@ -66,11 +66,11 @@
     </select>
 
     <!--插入操作-->
-    <insert id="insert" parameterType="com.imooc.entity.Goods">
+    <insert id="insert" parameterType="com.imooc.entity.Goods" useGeneratedKeys="true" keyProperty="goodsId" keyColumn="goods_id">
         insert into t_goods(title, sub_title, original_cost, current_price, discount, is_free_delivery, category_id)
         values (#{title}, #{subTitle}, #{originalCost}, #{currentPrice}, #{discount}, #{isFreeDelivery}, #{categoryId});
-        <selectKey resultType="integer" keyProperty="goodsId" order="AFTER">
-            select last_insert_id()
-        </selectKey>
+        <!--<selectKey resultType="integer" keyProperty="goodsId" order="AFTER">-->
+        <!--    select last_insert_id()-->
+        <!--</selectKey>-->
     </insert>
 </mapper>
