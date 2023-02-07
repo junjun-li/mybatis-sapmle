@@ -42,7 +42,7 @@
         limit 0, 5;
     </select>
 
-    <!--结果映射-->
+    <!--结果映射获取数据-->
     <resultMap id="rmGoods" type="com.imooc.dto.GoodsDTO">
         <!--设置主键字段与映射属性-->
         <id property="goods.goodsId" column="goods_id" />
@@ -57,7 +57,6 @@
         <result property="test" column="test" />
     </resultMap>
 
-
     <select id="selectGoodsDTO" resultMap="rmGoods">
         select g.*, c.*, '1' as test
         from t_goods g,
@@ -65,4 +64,13 @@
         where g.category_id = c.category_id
         limit 0, 5;
     </select>
+
+    <!--插入操作-->
+    <insert id="insert" parameterType="com.imooc.entity.Goods">
+        insert into t_goods(title, sub_title, original_cost, current_price, discount, is_free_delivery, category_id)
+        values (#{title}, #{subTitle}, #{originalCost}, #{currentPrice}, #{discount}, #{isFreeDelivery}, #{categoryId});
+        <selectKey resultType="integer" keyProperty="goodsId" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+    </insert>
 </mapper>

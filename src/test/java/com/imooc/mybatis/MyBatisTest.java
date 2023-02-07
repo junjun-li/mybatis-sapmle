@@ -140,4 +140,34 @@ public class MyBatisTest {
             MyBatisUtils.closeSession(sqlSession);
         }
     }
+
+    @Test
+    public void testInsert() {
+        SqlSession session = null;
+        try {
+            session = MyBatisUtils.openSession();
+            Goods goods = new Goods();
+            goods.setTitle("测试商品");
+            goods.setSubTitle("测试子标题");
+            goods.setOriginalCost(200f);
+            goods.setCurrentPrice(100f);
+            goods.setDiscount(0.5f);
+            goods.setIsFreeDelivery(1);
+            goods.setCategoryId(43);
+            // 返回插入成功的记录总数
+            int num = session.insert("goods.insert", goods);
+            System.out.println("num: "+ num);
+            System.out.println("The new insert id is: "+ goods.getGoodsId());
+            // 插入数据需要提交事物
+            session.commit();
+        } catch (Exception e) {
+            // 如果插入失败,需要进行事物回滚
+            if (session != null) {
+                session.rollback();
+            }
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(session);
+        }
+    }
 }
