@@ -1,5 +1,6 @@
 package com.imooc.mybatis;
 
+import com.imooc.dto.GoodsDTO;
 import com.imooc.entity.Goods;
 import com.imooc.utils.MyBatisUtils;
 import org.apache.ibatis.io.Resources;
@@ -114,6 +115,24 @@ public class MyBatisTest {
             List<Map> list = sqlSession.selectList("goods.selectGoodsLinkedHashMap");
             for (Map item : list) {
                 System.out.println(item);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
+        }
+    }
+
+    @Test
+    public void testSelectGoodsDTO() {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            List<GoodsDTO> list = sqlSession.selectList("goods.selectGoodsDTO");
+            for (GoodsDTO item : list) {
+                System.out.println("title: " + item.getGoods().getTitle());
+                System.out.println("categoryName: " + item.getCategory().getCategoryName());
+                System.out.println("test: " + item.getTest());
             }
         } catch (Exception e) {
             throw e;
