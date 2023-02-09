@@ -66,6 +66,19 @@
     </select>
 
     <!--插入操作-->
+    <!--
+        selectKey和useGeneratedKeys区别
+        - selectKey标签需要明确编写获取最新主键的SQL语句
+        - useGeneratedKeys属性会自动根据驱动生成对应SQL语句
+
+        应用场景的区别
+        - selectKey适用于所有的关系型数据库
+        - useGeneratedKeys只支持"自增主键"类型的数据库
+
+        总结
+        - selectKey是通用的解决方案,但是需要迁移数据库时增加了成本
+        - useGeneratedKeys配置即可通过驱动的不同生成不同的SQL,减少了维护成本,相对简单,但只支持"自增主键"类型的数据库
+    -->
     <insert id="insert" parameterType="com.imooc.entity.Goods" useGeneratedKeys="true" keyProperty="goodsId" keyColumn="goods_id">
         insert into t_goods(title, sub_title, original_cost, current_price, discount, is_free_delivery, category_id)
         values (#{title}, #{subTitle}, #{originalCost}, #{currentPrice}, #{discount}, #{isFreeDelivery}, #{categoryId});
@@ -73,4 +86,24 @@
         <!--    select last_insert_id()-->
         <!--</selectKey>-->
     </insert>
+
+    <!--update操作-->
+    <update id="update" parameterType="com.imooc.entity.Goods">
+        update t_goods
+        set title=#{title},
+            sub_title=#{subTitle},
+            original_cost=#{originalCost},
+            current_price=#{currentPrice},
+            discount=#{discount},
+            is_free_delivery=#{isFreeDelivery},
+            category_id=#{categoryId}
+        where goods_id = #{goodsId}
+    </update>
+
+    <!--删除操作-->
+    <delete id="delete" parameterType="Integer">
+        delete
+        from t_goods
+        where goods_id = #{value}
+    </delete>
 </mapper>

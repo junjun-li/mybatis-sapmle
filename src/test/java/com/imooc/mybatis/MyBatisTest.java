@@ -156,8 +156,8 @@ public class MyBatisTest {
             goods.setCategoryId(43);
             // 返回插入成功的记录总数
             int num = session.insert("goods.insert", goods);
-            System.out.println("num: "+ num);
-            System.out.println("The new insert id is: "+ goods.getGoodsId());
+            System.out.println("num: " + num);
+            System.out.println("The new insert id is: " + goods.getGoodsId());
             // 插入数据需要提交事物
             session.commit();
         } catch (Exception e) {
@@ -168,6 +168,46 @@ public class MyBatisTest {
             throw e;
         } finally {
             MyBatisUtils.closeSession(session);
+        }
+    }
+
+    @Test
+    public void testUpdate() {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            Goods goods = sqlSession.selectOne("goods.selectById", 739);
+            goods.setTitle("0209修改了该商品");
+            int num = sqlSession.update("goods.update", goods);
+            System.out.println("num: " + num);
+            // 提交事物
+            sqlSession.commit();
+        } catch (Exception e) {
+            if (sqlSession != null) {
+                sqlSession.rollback();
+            }
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
+        }
+    }
+
+    @Test
+    public void testDelete() {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            int delete = sqlSession.delete("goods.delete", 739);
+            System.out.println("delete: " + delete);
+            // 提交事物
+            sqlSession.commit();
+        } catch (Exception e) {
+            if (sqlSession != null) {
+                sqlSession.rollback();
+            }
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
         }
     }
 }
