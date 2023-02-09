@@ -210,4 +210,22 @@ public class MyBatisTest {
             MyBatisUtils.closeSession(sqlSession);
         }
     }
+
+    @Test
+    public void testSelectByTitle() {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            Map params = new HashMap<>();
+            params.put("title", "爱恩幼 孕妇护肤品润养颜睡眠面膜 100g");
+            List<Goods> list = sqlSession.selectList("goods.selectByTitle", params);
+            for (Goods g : list) {
+                System.out.println(g.getTitle() + " :" + g.getCurrentPrice());
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
+        }
+    }
 }
