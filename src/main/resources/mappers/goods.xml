@@ -13,13 +13,15 @@
         limit 10
     </select>
 
-    <select id="selectById" resultType="com.imooc.entity.Goods" parameterType="integer">
+    <!-- 单参数传递,使用parameterType指定参数的数据类型即可,SQL中#{value}提取参数-->
+    <select id="selectById" parameterType="integer" resultType="com.imooc.entity.Goods">
         select *
         from t_goods
         where goods_id = #{value}
     </select>
 
-    <select id="selectByPriceRange" resultType="com.imooc.entity.Goods" parameterType="java.util.Map">
+    <!-- 多参数传递时,使用parameterType指定Map接口,SQL中#{key}提取参数 -->
+    <select id="selectByPriceRange" parameterType="java.util.Map" resultType="com.imooc.entity.Goods">
         select *
         from t_goods
         where current_price between #{min} and #{max}
@@ -42,21 +44,20 @@
         limit 0, 5;
     </select>
 
-    <!--结果映射获取数据-->
+    <!--利用resultMap进行结果映射-->
     <resultMap id="rmGoods" type="com.imooc.dto.GoodsDTO">
         <!--设置主键字段与映射属性-->
-        <id property="goods.goodsId" column="goods_id" />
+        <id column="goods_id" property="goods.goodsId" />
         <!--设置非主键字段与属性映射-->
-        <result property="goods.title" column="title" />
-        <result property="goods.currentPrice" column="current_price" />
-        <result property="goods.categoryId" column="category_id" />
-        <result property="category.categoryId" column="category_id" />
-        <result property="category.parentId" column="parent_id" />
-        <result property="category.categoryName" column="category_name" />
+        <result column="title" property="goods.title" />
+        <result column="current_price" property="goods.currentPrice" />
+        <result column="category_id" property="goods.categoryId" />
+        <result column="category_id" property="category.categoryId" />
+        <result column="parent_id" property="category.parentId" />
+        <result column="category_name" property="category.categoryName" />
 
-        <result property="test" column="test" />
+        <result column="test" property="test" />
     </resultMap>
-
     <select id="selectGoodsDTO" resultMap="rmGoods">
         select g.*, c.*, '1' as test
         from t_goods g,
@@ -64,6 +65,7 @@
         where g.category_id = c.category_id
         limit 0, 5;
     </select>
+    <!--利用resultMap进行结果映射-->
 
     <!--插入操作-->
     <!--
@@ -79,7 +81,7 @@
         - selectKey是通用的解决方案,但是需要迁移数据库时增加了成本
         - useGeneratedKeys配置即可通过驱动的不同生成不同的SQL,减少了维护成本,相对简单,但只支持"自增主键"类型的数据库
     -->
-    <insert id="insert" parameterType="com.imooc.entity.Goods" useGeneratedKeys="true" keyProperty="goodsId" keyColumn="goods_id">
+    <insert id="insert" keyColumn="goods_id" keyProperty="goodsId" parameterType="com.imooc.entity.Goods" useGeneratedKeys="true">
         insert into t_goods(title, sub_title, original_cost, current_price, discount, is_free_delivery, category_id)
         values (#{title}, #{subTitle}, #{originalCost}, #{currentPrice}, #{discount}, #{isFreeDelivery}, #{categoryId});
         <!--<selectKey resultType="integer" keyProperty="goodsId" order="AFTER">-->
@@ -107,9 +109,33 @@
         where goods_id = #{value}
     </delete>
 
-    <select id="selectByTitle" resultType="com.imooc.entity.Goods" parameterType="java.util.Map">
+    <!--预防SQL注入, 使用#{}-->
+    <!--
+        ${}原文传值
+        select * from t_goods
+        where title = '' or 1 =1 or title = '【德国】爱他美婴幼儿配方奶粉1段800g*2罐 铂金版'
+
+        #{}预编译
+        select * from t_goods
+        where title = "'' or 1 =1 or title = '【德国】爱他美婴幼儿配方奶粉1段800g*2罐 铂金版'"
+    -->
+    <select id="selectByTitle" parameterType="java.util.Map" resultType="com.imooc.entity.Goods">
         select *
         from t_goods
         where title = #{title}
+    </select>
+
+    <!--动态SQL技术-->
+    <select id="dynamicSQL" parameterType="java.util.Map" resultType="com.imooc.entity.Goods">
+        select * from t_goods
+        <where>
+            <if test="categoryId != null">
+                and category_id=#{categoryId}
+            </if>
+            <if test="currentPrice != null">
+                # 小于号需要进行转义
+                and current_price &lt; #{currentPrice}
+            </if>
+        </where>
     </select>
 </mapper>

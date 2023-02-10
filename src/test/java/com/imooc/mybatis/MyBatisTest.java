@@ -4,19 +4,16 @@ import com.imooc.dto.GoodsDTO;
 import com.imooc.entity.Goods;
 import com.imooc.utils.MyBatisUtils;
 import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.Test;
-import sun.awt.image.ImageWatched;
 
 import java.io.Reader;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.*;
 
 public class MyBatisTest {
     @Test
@@ -51,7 +48,7 @@ public class MyBatisTest {
             Connection connection = sqlSession.getConnection();
             System.out.println(connection);
         } catch (Exception e) {
-            throw e;
+            throw new Exception(e);
         } finally {
             MyBatisUtils.closeSession(sqlSession);
         }
@@ -67,7 +64,7 @@ public class MyBatisTest {
                 System.out.println(g.getTitle());
             }
         } catch (Exception e) {
-            throw e;
+            throw new Exception(e);
         } finally {
             MyBatisUtils.closeSession(sqlSession);
         }
@@ -81,7 +78,7 @@ public class MyBatisTest {
             Goods goods = sqlSession.selectOne("goods.selectById", 1602);
             System.out.println(goods.getTitle());
         } catch (Exception e) {
-            throw e;
+            throw new Exception(e);
         } finally {
             MyBatisUtils.closeSession(sqlSession);
         }
@@ -101,14 +98,14 @@ public class MyBatisTest {
                 System.out.println("价格: " + g.getCurrentPrice() + " " + g.getTitle());
             }
         } catch (Exception e) {
-            throw e;
+            throw new Exception(e);
         } finally {
             MyBatisUtils.closeSession(sqlSession);
         }
     }
 
     @Test
-    public void testSelectGoodsLinkedHashMap() {
+    public void testSelectGoodsLinkedHashMap() throws Exception {
         SqlSession sqlSession = null;
         try {
             sqlSession = MyBatisUtils.openSession();
@@ -117,14 +114,14 @@ public class MyBatisTest {
                 System.out.println(item);
             }
         } catch (Exception e) {
-            throw e;
+            throw new Exception(e);
         } finally {
             MyBatisUtils.closeSession(sqlSession);
         }
     }
 
     @Test
-    public void testSelectGoodsDTO() {
+    public void testSelectGoodsDTO() throws Exception {
         SqlSession sqlSession = null;
         try {
             sqlSession = MyBatisUtils.openSession();
@@ -135,7 +132,7 @@ public class MyBatisTest {
                 System.out.println("test: " + item.getTest());
             }
         } catch (Exception e) {
-            throw e;
+            throw new Exception(e);
         } finally {
             MyBatisUtils.closeSession(sqlSession);
         }
@@ -224,6 +221,28 @@ public class MyBatisTest {
             }
         } catch (Exception e) {
             throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
+        }
+    }
+
+    /**
+     * 动态SQL语句
+     */
+    @Test
+    public void testDynamicSQL() throws Exception {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            Map params = new HashMap();
+            params.put("categoryId", 44);
+            params.put("currentPrice", 500);
+            List<Goods> list = sqlSession.selectList("goods.dynamicSQL", params);
+            for (Goods g : list) {
+                System.out.println(g.getTitle() + ":" + g.getCategoryId() + ":" + g.getCurrentPrice());
+            }
+        } catch (Exception e) {
+            throw new Exception(e);
         } finally {
             MyBatisUtils.closeSession(sqlSession);
         }

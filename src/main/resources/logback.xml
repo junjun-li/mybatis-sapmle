@@ -10,7 +10,7 @@
                 %-5level: debug 五个字符进行对齐
                 %logger{36}: 36表示最长字符串,超长智能进行压缩
             -->
-            <pattern>[%thread] %d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
