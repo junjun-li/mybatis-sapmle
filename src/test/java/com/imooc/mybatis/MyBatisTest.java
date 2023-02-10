@@ -247,4 +247,56 @@ public class MyBatisTest {
             MyBatisUtils.closeSession(sqlSession);
         }
     }
+
+    // 一级缓存默认开启, 缓存范围SqlSession会话
+    @Test
+    public void testLv1Cache() {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            Goods goods1 = sqlSession.selectOne("goods.selectById", 1603);
+            Goods goods2 = sqlSession.selectOne("goods.selectById", 1603);
+            System.out.println(goods1.hashCode() + ":" + goods2.hashCode());
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
+        }
+
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            Goods goods1 = sqlSession.selectOne("goods.selectById", 1603);
+            Goods goods2 = sqlSession.selectOne("goods.selectById", 1603);
+            System.out.println(goods1.hashCode() + ":" + goods2.hashCode());
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
+        }
+    }
+
+    // 二级缓存需要手动开启, 配置cache标签
+    @Test
+    public void testLv2Cache() {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            Goods goods = sqlSession.selectOne("goods.selectById", 1603);
+            System.out.println(goods.hashCode());
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
+        }
+
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            Goods goods = sqlSession.selectOne("goods.selectById", 1603);
+            System.out.println(goods.hashCode());
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
+        }
+    }
 }
