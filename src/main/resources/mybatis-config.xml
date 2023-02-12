@@ -8,6 +8,17 @@
         <setting name="mapUnderscoreToCamelCase" value="true" />
     </settings>
 
+    <!--启用Pagehelper分页插件-->
+    <!---->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!--设置数据库类型-->
+            <property name="helperDialect" value="mysql" />
+            <!--分页合理化-->
+            <property name="reasonable" value="true" />
+        </plugin>
+    </plugins>
+
     <environments default="dev">
         <!--dev环境配置-->
         <environment id="dev">
