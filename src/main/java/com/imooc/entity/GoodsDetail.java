@@ -2,27 +2,26 @@ package com.imooc.entity;
 
 
 public class GoodsDetail {
-
-  private long gdId;
-  private long goodsId;
+  private Integer gdId;
+  private Integer goodsId;
   private String gdPicUrl;
-  private long gdOrder;
+  private Integer gdOrder;
+  private Goods goods;
 
-
-  public long getGdId() {
+  public Integer getGdId() {
     return gdId;
   }
 
-  public void setGdId(long gdId) {
+  public void setGdId(Integer gdId) {
     this.gdId = gdId;
   }
 
 
-  public long getGoodsId() {
+  public Integer getGoodsId() {
     return goodsId;
   }
 
-  public void setGoodsId(long goodsId) {
+  public void setGoodsId(Integer goodsId) {
     this.goodsId = goodsId;
   }
 
@@ -36,12 +35,29 @@ public class GoodsDetail {
   }
 
 
-  public long getGdOrder() {
+  public Integer getGdOrder() {
     return gdOrder;
   }
 
-  public void setGdOrder(long gdOrder) {
+  public void setGdOrder(Integer gdOrder) {
     this.gdOrder = gdOrder;
   }
 
+  public Goods getGoods() {
+    return goods;
+  }
+
+  public void setGoods(Goods goods) {
+    this.goods = goods;
+  }
+
+  @Override
+  public String toString() {
+    return "GoodsDetail{" +
+        "gdId=" + gdId +
+        ", goodsId=" + goodsId +
+        ", gdPicUrl='" + gdPicUrl + '\'' +
+        ", gdOrder=" + gdOrder +
+        '}';
+  }
 }

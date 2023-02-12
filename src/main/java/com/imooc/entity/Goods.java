@@ -95,4 +95,11 @@ public class Goods {
         this.categoryId = categoryId;
     }
 
+    @Override
+    public String toString() {
+        return "Goods{" +
+            "goodsId=" + goodsId +
+            ", title='" + title + '\'' +
+            '}';
+    }
 }

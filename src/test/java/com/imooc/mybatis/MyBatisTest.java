@@ -2,6 +2,7 @@ package com.imooc.mybatis;
 
 import com.imooc.dto.GoodsDTO;
 import com.imooc.entity.Goods;
+import com.imooc.entity.GoodsDetail;
 import com.imooc.utils.MyBatisUtils;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -309,6 +310,25 @@ public class MyBatisTest {
             for (Goods i : list) {
                 System.out.println(i.getTitle());
                 System.out.println(i.getGoodsDetails());
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
+        }
+    }
+
+    /**
+     * 测试多对一对象关联映射
+     */
+    @Test
+    public void testManyToOne() {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            List<GoodsDetail> list = sqlSession.selectList("goodsDetail.selectManyToOne");
+            for (GoodsDetail gd : list) {
+                System.out.println(gd.getGdPicUrl() + ":" + gd.getGoods());
             }
         } catch (Exception e) {
             throw e;
