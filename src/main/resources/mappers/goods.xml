@@ -156,4 +156,21 @@
             </if>
         </where>
     </select>
+
+    <resultMap id="rmGoods1" type="com.imooc.entity.Goods">
+        <!--映射goods对象的主键到goods_id字段-->
+        <id column="goods_id" property="goodsId" />
+        <!--
+            collection的含义:
+                select * from t_goods limit 0, 10; 执行后,对所有Goods对象遍历得到所有的goods_id字段
+                然后代入到 goodsDetail.selectByGoodsId 中进行SQL查询
+                然后得到商品详情集合,赋值给 goodsDetails
+        -->
+        <collection column="goods_id"
+                    property="goodsDetails"
+                    select="goodsDetail.selectByGoodsId" />
+    </resultMap>
+    <select id="selectOneToMany" resultMap="rmGoods1">
+        select * from t_goods limit 0, 10;
+    </select>
 </mapper>

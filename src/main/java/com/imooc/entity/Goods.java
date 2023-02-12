@@ -1,5 +1,7 @@
 package com.imooc.entity;
 
+import java.util.List;
+
 public class Goods {
     /** 商品编号 */
     private Integer goodsId;
@@ -17,6 +19,17 @@ public class Goods {
     private Integer isFreeDelivery;
     /** 分类编号 */
     private Integer categoryId;
+
+    /** 商品图片 */
+    private List<GoodsDetail> goodsDetails;
+
+    public List<GoodsDetail> getGoodsDetails() {
+        return goodsDetails;
+    }
+
+    public void setGoodsDetails(List<GoodsDetail> goodsDetails) {
+        this.goodsDetails = goodsDetails;
+    }
 
     public Integer getGoodsId() {
         return goodsId;

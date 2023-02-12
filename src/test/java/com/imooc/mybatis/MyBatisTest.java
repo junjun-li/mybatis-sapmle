@@ -299,4 +299,21 @@ public class MyBatisTest {
             MyBatisUtils.closeSession(sqlSession);
         }
     }
+
+    @Test
+    public void testSelectOneToMany() {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            List<Goods> list = sqlSession.selectList("goods.selectOneToMany");
+            for (Goods i : list) {
+                System.out.println(i.getTitle());
+                System.out.println(i.getGoodsDetails());
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
+        }
+    }
 }
